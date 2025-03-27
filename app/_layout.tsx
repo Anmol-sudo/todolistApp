@@ -1,39 +1,71 @@
-import { DarkTheme, DefaultTheme, ThemeProvider } from '@react-navigation/native';
-import { useFonts } from 'expo-font';
-import { Stack } from 'expo-router';
-import * as SplashScreen from 'expo-splash-screen';
-import { StatusBar } from 'expo-status-bar';
-import { useEffect } from 'react';
-import 'react-native-reanimated';
-
-import { useColorScheme } from '@/hooks/useColorScheme';
-
-// Prevent the splash screen from auto-hiding before asset loading is complete.
-SplashScreen.preventAutoHideAsync();
+import { Ionicons } from "@expo/vector-icons";
+import { Stack } from "expo-router";
+import {
+  Image,
+  Text,
+  View,
+  StyleSheet,
+  TouchableNativeFeedback,
+  TouchableOpacity,
+} from "react-native";
 
 export default function RootLayout() {
-  const colorScheme = useColorScheme();
-  const [loaded] = useFonts({
-    SpaceMono: require('../assets/fonts/SpaceMono-Regular.ttf'),
-  });
-
-  useEffect(() => {
-    if (loaded) {
-      SplashScreen.hideAsync();
-    }
-  }, [loaded]);
-
-  if (!loaded) {
-    return null;
-  }
-
   return (
-    <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
-      <Stack>
-        <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-        <Stack.Screen name="+not-found" />
-      </Stack>
-      <StatusBar style="auto" />
-    </ThemeProvider>
+    <Stack
+      screenOptions={{
+        headerTitle: "",
+        headerLeft: () => (
+          <TouchableNativeFeedback>
+            <View style={styles.headerLeftContainer}>
+              <View>
+                <Image
+                  width={40}
+                  height={40}
+                  source={{ uri: "https://avatar.iran.liara.run/public" }}
+                />
+              </View>
+              <View style={styles.userDetailsContainer}>
+                <View style={styles.userNameContainer}>
+                  <Text>Krishna Weber</Text>
+                  <Ionicons name="chevron-down" size={22} />
+                </View>
+                <View>
+                  <Text
+                    style={styles.userEmail}
+                    numberOfLines={1}
+                    ellipsizeMode="tail"
+                  >
+                    krishnaweber9@outlook.com
+                  </Text>
+                </View>
+              </View>
+            </View>
+          </TouchableNativeFeedback>
+        ),
+        headerRight: () => (
+          <TouchableOpacity>
+            <Ionicons name="search" size={22} color="#246ec6" />
+          </TouchableOpacity>
+        ),
+      }}
+    />
   );
 }
+
+const styles = StyleSheet.create({
+  headerLeftContainer: {
+    flex: 1,
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 7,
+  },
+  userDetailsContainer: {},
+  userNameContainer: {
+    flex: 1,
+    flexDirection: "row",
+    marginBottom: -4,
+  },
+  userEmail: {
+    color: "#62748e",
+  },
+});
